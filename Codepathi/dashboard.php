@@ -3,31 +3,30 @@
 $right = -1;
 include "connect.php";
 $sid = $_SESSION['pid'];
-$nqres = mysqli_query($conn, "SELECT count(*) from responses1 where sid='$sid';");
+$nqres = mysqli_query($conn, "SELECT count(*) from responses where sid='$sid';");
 $qres = mysqli_fetch_array($nqres);
-$q = $qres[0];
+$q = $qres[1];
 
 if (isset($_GET['qid'])) {
-	$qid = (int)$_GET['qid'];
-	$response = strtoupper(trim($_GET['op']));
+    $qid = (int) $_GET['qid'];
+    $response = strtoupper(trim($_GET['op']));
 
-	$ans = mysqli_query($conn, "SELECT * FROM words3 where qid=$qid;");
-	$answer = mysqli_fetch_row($ans);
-	$sid = $_SESSION['pid'];
-	$ranswer = strtoupper($answer[1]);
-	$level = $answer[3];
-	$right = 1;
-	if ($level <= 3) {
-		$marks = 100;
-	}
-	if ($ranswer != $response) {
-		$marks = 0;
-		$right = 0;
-	}
-	$query = "insert into responses1 (sid, qid, answer,marks) values ('$sid', $qid, '$response', $marks)";
-	mysqli_query($conn, $query);
+    $ans = mysqli_query($conn, "SELECT * FROM words3 where qid=$qid;");
+    $answer = mysqli_fetch_row($ans);
+    $sid = $_SESSION['pid'];
+    $ranswer = strtoupper($answer[1]);
+    $level = $answer[3];
+    $right = 1;
+    if ($level <= 3) {
+        $marks = 100;
+    }
+    if ($ranswer != $response) {
+        $marks = 0;
+        $right = 0;
+    }
+    $query = "insert into responses (sid, qid, answer,marks) values ('$sid', $qid, '$response', $marks)";
+    mysqli_query($conn, $query);
 }
-
 ?>
 
 
@@ -35,10 +34,10 @@ if (isset($_GET['qid'])) {
 <html class="sidebar-light fixed sidebar-left-collapsed">
 
 <head>
-	<?php include "head.php"; ?>
+	<?php include "head.php";?>
 	<style>
 		{
-			background-size : 150%;
+			background-size: 150%;
 			background-position: center;
 			background-repeat: no-repeat;
 			background-attachment: fixed;
@@ -165,22 +164,22 @@ if (isset($_GET['qid'])) {
 <?php
 
 if ($right == 1) {
-?>
+    ?>
 
 	<script>
-		var audio = new Audio("sounds/skanda.mp3");
+		var audio = new Audio("sounds/ipl.mp3");
 		audio.play();
-		//var audio = new Audio("sounds/claps.mp3");
-		//audio.play();
+		var audio = new Audio("sounds/claps.mp3");
+		audio.play();
 	</script>
 
 <?php
 }
 if ($right == 0) {
-?>
+    ?>
 
 	<script>
-		var audio = new Audio("sounds/moye.mp3");
+		var audio = new Audio("sounds/aipaye.mp3");
 		audio.play();
 	</script>
 
@@ -193,10 +192,10 @@ if ($right == 0) {
 <body>
 
 	<section class="body">
-		<?php include "header.php"; ?>
+		<?php include "header.php";?>
 		<div class="inner-wrapper">
 			<!-- start: sidebar -->
-			<?php include "sidebar.php"; ?>
+			<?php include "sidebar.php";?>
 			<!-- end: sidebar -->
 			<section role="main" class="content-body">
 				<header class="page-header">
@@ -204,8 +203,8 @@ if ($right == 0) {
 				</header>
 				<?php
 
-				if ($right == 1) {
-				?>
+if ($right == 1) {
+    ?>
 					<div id="swinner" class="modal-block modal-header-color modal-block-primary">
 						<section class="card">
 							<header class="card-header">
@@ -224,8 +223,8 @@ if ($right == 0) {
 						</section>
 					</div>
 				<?php
-				} else if ($right == 0) {
-				?>
+} else if ($right == 0) {
+    ?>
 
 					<div id="srunner" class="modal-block modal-header-color modal-block-danger">
 						<section class="card">
@@ -247,9 +246,9 @@ if ($right == 0) {
 
 				<?php
 
-				}
+}
 
-				?>
+?>
 
 				<div id="srunner" class="modal-block modal-header-color modal-block-danger">
 					<section class="card">
@@ -259,127 +258,99 @@ if ($right == 0) {
 						</header>
 						<div class="card-body">
 							<?php
-							if ($q < 4) {
-								$q = $q + 1;
-								echo "<h4 align='center' STYLE='COLOR:RED; class='box'><B>YOUR QUESTION NO - $q </B></h4>";
-								$ques = mysqli_query($conn, "SELECT * FROM words3 where qid not in (select qid from responses1 where sid='$sid') AND level=2 ORDER BY RAND() LIMIT 1;");
-								$qrow = mysqli_fetch_array($ques);
-								$qid = $qrow['qid'];
-								$ranswer = strtoupper($qrow['answer']);
-								$question = $qrow['question'];
-								$opr = array($qrow['option1'], $qrow['option2'], $qrow['option3'], $ranswer);
-								shuffle($opr);
+if ($q <= 4) {
+    echo "<h4 align='center' STYLE='COLOR:RED; class='box'><B>YOUR QUESTION NO - $q</B></h4>";
+    $ques = mysqli_query($conn, "SELECT * FROM words3 WHERE qid NOT IN (SELECT qid FROM responses WHERE sid='$sid') AND level=1 ORDER BY RAND() LIMIT 1;");
+    $qrow = mysqli_fetch_array($ques);
+    $qid = $qrow['qid'];
+    $ranswer = strtoupper($qrow['answer']);
+    $question = $qrow['question'];
+    $opr = array($qrow['option1'], $qrow['option2'], $qrow['option3'], $ranswer);
+    shuffle($opr);
 
-								$option1 = strtoupper($opr[0]);
-								$option2 = strtoupper($opr[1]);
-								$option3 = strtoupper($opr[2]);
-								$option4 = strtoupper($opr[3]);
+    $option1 = strtoupper($opr[0]);
+    $option2 = strtoupper($opr[1]);
+    $option3 = strtoupper($opr[2]);
+    $option4 = strtoupper($opr[3]);
 
-								$userResponsesQuery = "SELECT qid, answer AS response, marks FROM responses1 WHERE sid='$sid'";
-								$userResponsesResult = mysqli_query($conn, $userResponsesQuery);
+    $userResponsesQuery = "SELECT qid, answer AS response, marks FROM responses WHERE sid='$sid'";
+    $userResponsesResult = mysqli_query($conn, $userResponsesQuery);
 
-								echo "<div align='center' class='box'><h4><b>Question: </b></h4></div>";
-								echo "<pre align='center' class='box' style='font-size: 18px;'>" . htmlspecialchars($question) . "</pre>";
+    echo "<div align='center' class='box'><h4><b>Question: </b></h4></div>";
+    echo "<pre align='center' class='box' style='font-size: 18px;'>" . htmlspecialchars($question) . "</pre>";
 
+    echo "<div align='center' class='box'><h4><b>Level 1: </b>";
 
+    //echo "<button class='mb-1 mt-1 mr-1 btn btn-primary' onclick='spell_human($qid);'><span style='color:#000000;'><i class='fas fa-volume-up'></i> SPELL HUMAN WORD <i class='fas fa-play'></i></span></button>";
 
+    //echo "<div id='spelling'>WRITE THE CORRECT SPELLING IN THE TEXT BOX<div class='col-8'><input type='hidden' name='qid' id='qid' value='$qid'><input type='text' class='form-control' name='answer'  id='answer'  value='' placeholder='Your Spelling Here' style='text-transform:uppercase;' autocomplete='off' REQUIRED></div><div class='col-4'><button type='submit' class='mb-1 mt-1 mr-1 btn btn-success' onclick='check_spelling();'>Submit Spelling</button></div></div>";
+    echo "<div id='box'>CLICK ON THE RIGHT ANSWER</div>";
+    echo "<div align='center' class='box'>";
+    echo "<a href='dashboard.php?qid=$qid&op=$option1'><button type='button' class='mb-1 mt-1 mr-1 btn btn-primary'>$option1</button></a>";
+    echo "<a href='dashboard.php?qid=$qid&op=$option2'><button type='button' class='mb-1 mt-1 mr-1 btn btn-primary'>$option2</button></a>";
+    echo "<a href='dashboard.php?qid=$qid&op=$option3'><button type='button' class='mb-1 mt-1 mr-1 btn btn-primary'>$option3</button></a>";
+    echo "<a href='dashboard.php?qid=$qid&op=$option4'><button type='button' class='mb-1 mt-1 mr-1 btn btn-primary'>$option4</button></a>";
+    echo "</div>";
+    echo "<button id='fiftyFiftyBtn' type='button' class='mb-1 mt-1 mr-1 btn btn-warning'>50-50</button>";
 
-								echo "<div align='center' class='box'><h4><b>Level 1: </b>";
-								echo "<div id='box'>CLICK ON THE RIGHT ANSWER</div>";
+} else {
+    echo "<h3 style='color:red;' align='center'>LEVEL 1 has completed</h3>";
+}
 
-
-
-								echo "<a href='dashboard.php?qid=$qid&op=$option1'><button type='submit' class='mb-1 mt-1 mr-1 btn btn-primary' class='box'>$option1</button></a>";
-								echo "<a href='dashboard.php?qid=$qid&op=$option2'><button type='submit' class='mb-1 mt-1 mr-1 btn btn-primary' class='box'>$option2</button></a>";
-								echo "<a href='dashboard.php?qid=$qid&op=$option3'><button type='submit' class='mb-1 mt-1 mr-1 btn btn-primary' class='box'>$option3</button></a>";
-								echo "<a href='dashboard.php?qid=$qid&op=$option4'><button type='submit' class='mb-1 mt-1 mr-1 btn btn-primary' class='box'>$option4</button></a>";
-
-								echo "</div>";
-							} else {
-								echo "<h3 style='color:red;' align='center'>YOUR LEVEL-1 KBC HAS BEEN COMPLETED!</h3>";
-								$totalMarks = 0; // Initialize total marks variable
-								$userResponsesQuery = "SELECT qid, answer AS response, marks FROM responses1 WHERE sid='$sid'";
-								$userResponsesResult = mysqli_query($conn, $userResponsesQuery);
-								while ($row = mysqli_fetch_assoc($userResponsesResult)){
-									$totalMarks += $row['marks']; // Accumulate marks
-
-								}
-								if ($totalMarks > 300) {
-									echo "<div align='center'>
-					<button id='quit' style='background-color:red; color:white;  border-radius: 20px; width: 100px '>Quit Here</button>
-					<button id='continue' style='color:white; background-color:green;  border-radius: 20px; width: 100px '>Continue</button>
-				</div>";
-								}
-							}
-
-
-
-							?>
+?>
 						</div>
 					</section>
 				</div>
-				<section class="user-responses-section">
-					<h2>Your Score Card</h2>
-					<table border="5">
-						<thead>
-							<tr>
-								<th>Question</th>
-								<th>Response</th>
-								<th>Marks</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php
-							$totalMarks = 0; // Initialize total marks variable
-							$userResponsesQuery = "SELECT qid, answer AS response, marks FROM responses1 WHERE sid='$sid'";
-							$userResponsesResult = mysqli_query($conn, $userResponsesQuery);
-                            
-							$s = 0;
-							while ($row = mysqli_fetch_assoc($userResponsesResult)) {
-								if($s < 5)
-								{
-								$s = $s + 1;
-								echo "<tr>";
-								echo "<td>{$s}</td>";
-								echo "<td>{$row['response']}</td>";
-								echo "<td>{$row['marks']}</td>";
-								echo "</tr>";
-
-								$totalMarks += $row['marks'];
-								} // Accumulate marks
-							}
-							?>
-							<!-- Display total marks row -->
-							<tr>
-								<td style="color:red" colspan="2">Total Marks:</td>
-								<td style="color:red"><?php echo $totalMarks; ?></td>
-							</tr>
-						</tbody>
-					</table>
-					<?php
-					 if($s == 5)
-					 {
-						$sql1 = "SELECT points FROM users WHERE pid='$sid'";
-						$result1 = mysqli_query($conn, $sql1);
-
-						// Check if the query was successful
-						if ($result1) {
-							$row = mysqli_fetch_assoc($result1);
-							$currentPoints = $row['points'];
-
-							// Assuming $totalMarks is a variable with some numeric value
-							$newTotalPoints = $currentPoints + $totalMarks;
-
-							// Update the points in the database
-							$sql2 = "UPDATE users SET points=$newTotalPoints WHERE pid='$sid'";
-							$result2 = mysqli_query($conn, $sql2);
-						}
-					}
-					?>
-				</section>
 				
 
 
+				<section class="user-responses-section">
+					<?php
+$totalMarks = 0;
+
+$userResponsesQuery = "SELECT qid, answer AS response, marks FROM responses WHERE sid='$sid'";
+$userResponsesResult = mysqli_query($conn, $userResponsesQuery);
+
+// Count the number of responses
+
+echo "<table border='5'>";
+echo "<thead>";
+echo "<tr>";
+echo "<th>QID</th>";
+echo "<th>Response</th>";
+echo "<th>Marks</th>";
+echo "</tr>";
+echo "</thead>";
+echo "<tbody>";
+
+// Display user responses
+while ($row = mysqli_fetch_assoc($userResponsesResult)) {
+    echo "<tr>";
+    echo "<td>{$row['qid']}</td>";
+    echo "<td>{$row['response']}</td>";
+    echo "<td>{$row['marks']}</td>";
+    echo "</tr>";
+
+    $totalMarks += $row['marks']; // Accumulate marks
+}
+
+echo "</tbody>";
+echo "</table>";
+
+// If you have already calculated $totalMarks from the database, you can use it here
+echo "<h3 align='center' style='color:blue;'>Total Marks: $totalMarks</h3>";
+
+?>
+
+
+</section>
+				<?php
+
+$points_res = mysqli_query($conn, "SELECT * from users where pid='$sid';");
+$points = mysqli_fetch_array($points_res);
+
+?>
+
 		</div>
 
 		</div>
@@ -391,17 +362,7 @@ if ($right == 0) {
 	</section>
 	</section>
 	</div>
-
-	<script>
-		document.getElementById('quit').addEventListener('click', function() {
-			window.location.href = 'index.php';
-		});
-
-		document.getElementById('continue').addEventListener('click', function() {
-			window.location.href = 'level2.php';
-		});
-	</script>
-
+	
 
 	<!-- Vendor -->
 	<script src="vendor/jquery/jquery.js"></script>
@@ -470,13 +431,39 @@ if ($right == 0) {
 			}
 		}
 	</script>
+	<!-- Add this JavaScript code at the end of your HTML body -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to remove two random wrong options
+        function removeWrongOptions() {
+            var options = document.querySelectorAll('.box .btn-primary');
+            var removedIndices = [];
+            while (removedIndices.length < 2) {
+                var randIndex = Math.floor(Math.random() * options.length);
+                if (!removedIndices.includes(randIndex) && options[randIndex].textContent.toUpperCase() !== '<?php echo strtoupper($ranswer); ?>') {
+                    removedIndices.push(randIndex);
+                }
+            }
+            removedIndices.forEach(function(index) {
+                options[index].style.display = 'none';
+            });
+            // Disable the lifeline button after usage
+            document.getElementById('fiftyFiftyBtn').disabled = true;
+        }
+
+        // Event listener for the 50-50 lifeline button
+        document.getElementById('fiftyFiftyBtn').addEventListener('click', removeWrongOptions);
+    });
+</script>
+
 
 	<script>
 		/*     function post_answer(qid,ans)
 	 {
 		 alert("hi");
 		 alert(qid);
-		 alert(ans);		 
+		 alert(ans);
 	 }
 */
 	</script>
@@ -484,7 +471,7 @@ if ($right == 0) {
 
 
 	<br><br>
-	<?php include "footer.php"; ?>
+	<?php include "footer.php";?>
 
 </body>
 
