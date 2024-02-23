@@ -276,7 +276,7 @@ if ($right == 0) {
 
 <body>
 	<h2>Level 1</h2>
-	<section class="body" style="margin-top: -100px;">
+	<section class="body" style="margin-top: -70px;">
 		<?php include "header.php"; ?>
 
 		<div class="inner-wrapper">
@@ -418,7 +418,7 @@ if (isset($_GET['life2'])) {
 	while ($row3 = mysqli_fetch_assoc($result3)) {
 		echo "<div id='rowww'>";
 		if ($row3['button1'] == 0) {
-			echo " <button type='button' class='button1 mb-1 mt-1 mr-1 btn '  id='optionns'  name='life1'><a style='margin-top:2px;'><img src='img/telephone.svg'/></a></button>";
+			echo " <button type='button' class='button1 mb-1 mt-1 mr-1 btn '  id='optionns'  onclick='openDialPad()' name='life1'><a style='margin-top:2px;'><img src='img/telephone.svg'/></a></button>";
 		}
 		if ($row3['button2'] == 0) {
 			echo "<form action='' method='get'>";
@@ -589,6 +589,14 @@ if (isset($_GET['life2'])) {
 		document.getElementById('continue').addEventListener('click', function() {
 			window.location.href = 'level2.php';
 		});
+
+		function openDialPad() {
+        // You can replace the '1234567890' with the desired phone number
+        var phoneNumber = '';
+
+        // Using the tel: URI scheme to open the phone dial pad
+        window.location.href = 'tel:' + phoneNumber;
+    }
 	</script>
 
 
