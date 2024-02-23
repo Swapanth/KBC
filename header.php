@@ -109,14 +109,7 @@
 			<div class="row">
         <div class="col-md-12">
             <div class="d-flex align-items-center" style="margin-right: 175px;">
-                <marquee class="news-scroll" behavior="scroll" direction="left" onmouseover="this.stop();" onmouseout="this.start();">
-                    <a href="#" style="color: black; z-index:1;">Kaun Banega Codepathi Welcomes You</a>
-                    <span class="dot"></span>
-                    <a href="#" style="color: black; z-index:1;">Come On Go And Check Your Coding Knowledge</a>
-                    <span class="dot"></span>
-                    <a href="#" style="color:black; z-index:1;">Thanks For Enrolling</a>
-                    <span class="name" style="color: black; z-index:1;"><?php echo $_SESSION['player_name']; ?></span>
-                </marquee>
+               
             </div>
         </div>
     </div>

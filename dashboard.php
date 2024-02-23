@@ -400,6 +400,8 @@ if ($right == 0) {
 
 
 						?>
+
+
 						 <div style="text-align:left; margin-left:-100px;" class='box'>
 
 <?php
@@ -409,14 +411,14 @@ if (isset($_GET['life2'])) {
 	$re = mysqli_query($conn, $sq);
 }
 ?>
-
 <div align='left' class='box'>
 	<?php
 	$sql3 = "SELECT * FROM users WHERE pid='$sid'";
 	$result3 = mysqli_query($conn, $sql3);
 	while ($row3 = mysqli_fetch_assoc($result3)) {
+		echo "<div id='rowww'>";
 		if ($row3['button1'] == 0) {
-			echo "<div id='rowww'> <button type='button' class='button1 mb-1 mt-1 mr-1 btn '  id='optionns'  name='life1'><a style='margin-top:2px;'><img src='img/telephone.svg'/></a></button>";
+			echo " <button type='button' class='button1 mb-1 mt-1 mr-1 btn '  id='optionns'  name='life1'><a style='margin-top:2px;'><img src='img/telephone.svg'/></a></button>";
 		}
 		if ($row3['button2'] == 0) {
 			echo "<form action='' method='get'>";
@@ -424,13 +426,16 @@ if (isset($_GET['life2'])) {
 			echo "</form>";
 		}
 		if ($row3['button3'] == 0) {
-			echo "<button type='button' class='button3 mb-1 mt-1 mr-1 btn ' ' id='optionns'  name='life3'><a style='margin-top:0px;'>50</a></button> </div>";
+			echo "<button type='button' class='button3 mb-1 mt-1 mr-1 btn ' ' id='optionns'  name='life3'><a style='margin-top:0px;'>50</a></button>";
 		}
+		echo "</div>";
 	}
 
 	?>
 </div>
 </div>
+
+
 
 
 

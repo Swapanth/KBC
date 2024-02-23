@@ -1,4 +1,3 @@
-<?php include "access_check.php"; ?>
 <?php
 include "connect.php";
 $sql = "SELECT player_name, points FROM users ORDER BY points DESC, stamp DESC";
@@ -13,7 +12,7 @@ $result = mysqli_query($conn, $sql);
 
 <head>
     <style>
-        {
+        body{
             background-size: 150%;
             background-position: center;
             background-repeat: no-repeat;
@@ -89,22 +88,19 @@ $result = mysqli_query($conn, $sql);
 
         th,
         td {
-            border: 2px solid black;
+            border: 1px solid black;
             padding: 8px;
             text-align: left;
-            -webkit-text-fill-color: black bold;
             color: whitesmoke;
             /* Set the text color */
             font-weight: bold;
             /* Set the text weight to bold */
-            text-shadow: 1px 1px 1px black;
         }
 
         th {
             background-color: purple;
             color: whitesmoke;
             /* Set the text color to black */
-            font-weight: bold;
             /* Increase the thickness of the text */
         }
 
@@ -130,14 +126,11 @@ $result = mysqli_query($conn, $sql);
 
 <body>
     <section class="body">
-        <?php include "header.php"; ?>
         <div class="inner-wrapper">
-            <!-- start: sidebar -->
-            <?php include "sidebar.php"; ?>
-            <!-- end: sidebar -->
+           
             <section role="main" class="content-body">
                 <header class="page-header">
-                    <h2 style="margin-left: 37%;">Kaun Banega Codepathi</h2>
+                    <h2 >Kaun Banega Codepathi</h2>
                 </header>
                 <h2>Points Table</h2>
                 <table>
