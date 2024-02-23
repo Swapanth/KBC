@@ -1,14 +1,4 @@
-<!--
-			<header class="header">
-				<div class="logo-container">
-						<img src="img/sponsor.png" alt="BO HOUSIE" />
-					<div class="d-md-none toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
-						<i class="fas fa-bars" aria-label="Toggle sidebar"></i>
-					</div>
-				</div>
-			</header>
--->
-<!-- end: header -->
+
 <!DOCTYPE html>
 <html >
 	<head>
@@ -98,19 +88,19 @@
     <header class="header">
         <div class="logo-container">
             <a href="dashboard.php" class="logo">
-                <img src="\KBC-PRO-main\KBC-PRO-main\KBC-PRO-main\KBC-PRO\spellbee\img\kbp.jpg" style="margin-top: -10px" width=55 alt="MCR WEB" />
+                <img src="img/kbp.jpg" style="margin-top: -10px" width=55 alt="MCR WEB" />
             </a>
-            <div class="d-md-none toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html"
+            <!-- <div class="d-md-none toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html"
                 data-fire-event="sidebar-left-opened">
                 <i class="fas fa-bars" aria-label="Toggle sidebar"></i>
-            </div>
+            </div> -->
         </div>
-
+<!-- 
         <div class="header-right">
-            <!-- Your other header-right content here -->
-        </div>
+            Your other header-right content here 
+        </div> -->
 
-		<div class="header-center">
+		<!-- <div class="header-center">
     <div class="row">
         <div class="col-md-12">
             <span class="d-flex align-items-center">&nbsp;KBC NEWS</span>
@@ -121,12 +111,12 @@
                     <a href="#" style="color: whitesmoke;">Come On Go And Check Your Coding Knowledge</a>
                     <span class="dot"></span>
                     <a href="#" style="color:whitesmoke;">Thanks For Enrolling</a>
-                    <span class="name" style="color: whitesmoke;"><?php echo $_SESSION['player_name']; ?></span>
+                    <span class="name" style="color: whitesmoke;"></span>
                 </marquee>
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
         <!-- Your other header content here -->
@@ -136,109 +126,10 @@
 
 		<!-- start: search & user box -->
 		<div class="header-right">
-			<span class="separator"></span>
 
-			<!--					<ul class="notifications">
-						<li>
-							<a href="#" onclick='get_sgames();' class="dropdown-toggle notification-icon" data-toggle="dropdown">
-								<i class="fas fa-tasks"></i>
-								<span class="badge">
-								<?php
-								?>
-								
-								</span>
-							</a>
-			
-							<div class="dropdown-menu notification-menu large">
-								<div class="notification-title">
-									<span class="float-right badge badge-default"><?php  //echo $sch; 
-																					?></span>
-									Scheduled Games
-								</div>
-			
-								<div class="content">
-									<ul id='scheduled_games' style='font-size:12px;'>
-									</ul>
-								</div>
-								
-							</div>
-						</li>
-						<li>
-							<a href="#" class="dropdown-toggle notification-icon" data-toggle="dropdown">
-								<i class="fas fa-bell"></i>
-								<span class="badge">3</span>
-							</a>
-			
-							<div class="dropdown-menu notification-menu">
-								<div class="notification-title">
-									<span class="float-right badge badge-default">3</span>
-									Alerts
-								</div>
-			
-								<div class="content">
-									<ul>
-										<li>
-											<a href="#" class="clearfix">
-												<div class="image">
-													<i class="fas fa-thumbs-up bg-danger text-light"></i>
-												</div>
-												<span class="title">1 FREE Game Every Day!</span>
-												<span class="message">Stay Tuned @ 7:30 PM</span>
-											</a>
-										</li>
-										<li>
-											<a href="#" class="clearfix">
-												<div class="image">
-													<i class="fas fa-gift bg-warning text-light"></i>
-												</div>
-												<span class="title">Play & Win Gifts / Points</span>
-												<span class="message">Exciting Prizes / Reward Points / Vouchers</span>
-											</a>
-										</li>
-										<li>
-											<a href="#" class="clearfix">
-												<div class="image">
-													<i class="fas fa-user-friends bg-success text-light"></i>
-												</div>
-												<span class="title">Invite Friends & Earn Points</span>
-												<span class="message">Get 10 points for every successful referral</span>
-											</a>
-										</li>
-									</ul>
-			
-									<hr />
-			
-									<div class="text-right">
-										<a href="#" class="view-more">View All</a>
-									</div>
-								</div>
-							</div>
-						</li>
-					</ul>
--->
-			<span class="separator"></span>
+		<div class="bt-primary" style="margin-right:50px; margin-top:15px">
 
-			<div id="userbox" class="userbox">
-				<a href="#" data-toggle="dropdown">
-					<div class="profile-info">
-						<span class="name"><?php echo $_SESSION['player_name']; ?></span>
-						<span class="role"><?php echo $_SESSION['place']; ?></span>
-					</div>
-
-					<i class="fa custom-caret"></i>
-				</a>
-
-				<div class="dropdown-menu" style="color:whitesmoke";>
-					<ul class="list-unstyled mb-2">
-						<li class="divider"></li>
-						<li>
-							<a role="menuitem" tabindex="-1" href="#"><i class="fas fa-user"></i> My Profile</a>
-						</li>
-						<li>
-							<a role="menuitem" tabindex="-1" href="index.php?logout"><i class="fas fa-power-off"></i> Logout</a>
-						</li>
-					</ul>
-
+							<a href="index.php?logout"><button class="fas fa-power-off btn-primary"></button> Logout</a>
 				</div>
 			</div>
 		</div>

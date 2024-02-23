@@ -181,7 +181,7 @@ if ($right == 1) {
 ?>
 
 	<script>
-		var audio = new Audio("sounds/skanda.mp3");
+		var audio = new Audio("sounds/jamalo.mp3");
 		audio.play();
 		//var audio = new Audio("sounds/claps.mp3");
 		//audio.play();

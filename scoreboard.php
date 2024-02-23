@@ -1,9 +1,7 @@
 <?php include "access_check.php"; ?>
 <?php
-$right = -1;
 include "connect.php";
-$sid = $_SESSION['pid'];
-$sql = "SELECT player_name, points FROM users ORDER BY points DESC";
+$sql = "SELECT player_name, points FROM users ORDER BY points DESC, stamp DESC";
 
 // Execute the query
 $result = mysqli_query($conn, $sql);
@@ -108,7 +106,7 @@ $result = mysqli_query($conn, $sql);
             /* Set the text color to black */
             font-weight: bold;
             /* Increase the thickness of the text */
-        } 
+        }
 
         h2 {
             text-align: center;
@@ -150,37 +148,20 @@ $result = mysqli_query($conn, $sql);
                         </tr>
                     </thead>
                     <tbody>
-                    <?php
-                // Fetch data from the result set
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td>" . $row['player_name'] . "</td>";
-                    echo "<td>" . $row['points'] . "</td>";
-                    echo "</tr>";
-                }
-                ?>
+                        <?php
+                        // Fetch data from the result set
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo "<tr>";
+                            echo "<td>" . $row['player_name'] . "</td>";
+                            echo "<td>" . $row['points'] . "</td>";
+                            echo "</tr>";
+                        }
+                        ?>
                     </tbody>
                 </table>
             </section>
         </div>
     </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <script src="vendor/jquery/jquery.js"></script>
