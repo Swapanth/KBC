@@ -31,11 +31,83 @@
 		 }
 		 
       ?>
+	<div class="help-block text-center">
+
+	    <?php
+	  
+	  if(isset($_REQUEST['logout']))
+	   {
+		 session_start();
+		 $pid=$_SESSION['pid'];		   
+		 include "connect.php";
+		 mysqli_query($conn, "update users set status=0 where pid='$pid'");	 
+
+		   $_SESSION = array();
+		 session_destroy();
+		 if(!isset($_SESSION['pid']))
+		   {
+			 echo "<center><span style='color:red;'>You are now logged out!</span></center>";
+		   }			   
+	   }
+	  else if(isset($_REQUEST['pwderror']))
+	   {
+		 session_start(); 
+		   $_SESSION = array();
+		 session_destroy();
+		 echo "<center><span style='color:red;' id='foo'><b>Invalid Mobile / PIN!</b></span></center>";
+	   }
+	  else  
+		{		
+		//echo "<span style='font-size:14px;'>Default PIN: <b style='color:red;'>0000</b></span>";
+	   }			
+	   
+	   if($signup == 1)
+		   {
+			 echo "<center><span style='color:green;'>ACCOUNT CREATED SUCCESSFULLY! LOGIN NOW!</span></center>";
+		   }			   
+	   if($signup == 2)
+		   {
+			  // echo $query;
+			   
+			 echo "<center><span style='color:red;'>ERROR CREATING ACCOUNT. CONTACT ADMIN!</span></center>";
+		   }			   
+	   if($signup == 3)
+		   {
+			 echo "<center><span style='color:red;'>USER ALREADY EXISTS. LOGIN NOW!</span></center>";
+		   }			   
+
+	?>
+	</div>
 
 <!doctype html>
 <html class="fixed">
 	<head>
    <?php include "head.php"; ?>
+   <style>
+			{
+			background-size: 150%;
+			background-position: center;
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+		}
+
+		/* Large screens (desktops) */
+		@media (min-width: 769px) {
+			body {
+				background: url('https://getwallpapers.com/wallpaper/full/e/4/6/570852.jpg') center center fixed;
+
+			}
+		}
+
+		/* Small screens (mobile devices) */
+		@media (max-width: 768px) {
+			body{
+				background: url('https://getwallpapers.com/wallpaper/full/e/4/6/570852.jpg') center center fixed;
+				background-size: cover;
+				/* Adjust other background properties as needed for mobile view */
+			}
+		}
+		</style>
 	</head>
 	<body>
 
@@ -75,54 +147,9 @@
 								</div>
 							</div>
 			
-	  <div class="help-block text-center">
-	  <?php
-	  
-	    if(isset($_REQUEST['logout']))
-		 {
-		   session_start();
-           $pid=$_SESSION['pid'];		   
-		   include "connect.php";
-		   mysqli_query($conn, "update users set status=0 where pid='$pid'");	 
-
-  		   $_SESSION = array();
-           session_destroy();
-           if(!isset($_SESSION['pid']))
-             {
-               echo "<center><span style='color:red;'>You are now logged out!</span></center>";
-			 }			   
-		 }
-		else if(isset($_REQUEST['pwderror']))
-		 {
-		   session_start(); 
-  		   $_SESSION = array();
-           session_destroy();
-           echo "<center><span style='color:red;' id='foo'><b>Invalid Mobile / PIN!</b></span></center>";
-		 }
-        else  
- 		 {		
-          //echo "<span style='font-size:14px;'>Default PIN: <b style='color:red;'>0000</b></span>";
-		 }			
-		 
-		 if($signup == 1)
-             {
-               echo "<center><span style='color:green;'>ACCOUNT CREATED SUCCESSFULLY! LOGIN NOW!</span></center>";
-			 }			   
-		 if($signup == 2)
-             {
-				// echo $query;
-				 
-               echo "<center><span style='color:red;'>ERROR CREATING ACCOUNT. CONTACT ADMIN!</span></center>";
-			 }			   
-		 if($signup == 3)
-             {
-               echo "<center><span style='color:red;'>USER ALREADY EXISTS. LOGIN NOW!</span></center>";
-			 }			   
-
-      ?>
+	
 	  
 	  
-	  </div>
 
 							<div class="row">
 								<div class="col-6">
@@ -167,7 +194,7 @@
         </script>	
 
 <!-- GetButton.io widget -->
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
     (function () {
         var options = {
             whatsapp: "+919293940004", // WhatsApp number
@@ -179,7 +206,7 @@
         s.onload = function () { WhWidgetSendButton.init(host, proto, options); };
         var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
     })();
-</script>
+</script> -->
 
             
         

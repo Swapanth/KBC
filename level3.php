@@ -211,6 +211,9 @@ if ($right == 0) {
 				<header class="page-header">
 					<h2 style="margin-left: 37%;">Kaun Banega Codepathi</h2>
 				</header>
+				<button id="toggleTimer" onclick="toggleTimer()">Start Timer</button>
+				<button id="pauseResume" onclick="pauseResumeTimer()" disabled>Pause</button>
+
 				<?php
 
 				if ($right == 1) {
@@ -319,8 +322,8 @@ if ($right == 0) {
 								}
 								if ($totalMarks = 500) {
 									echo "<div align='center'>
-					<button id='quit' style='background-color:red; color:white;  border-radius: 20px;'>Quit Here</button>
-					<button id='continue' style='background-color:green; color : white; border-radius: 20px;'>Continue</button>
+					<a href='index.php' <button id='quit' style='background-color:red; color:white;  border-radius: 20px;'>Quit Here</button></a>
+					<a href='scoreboard.php' <button id='continue' style='background-color:green; color : white; border-radius: 20px;'>Continue</button></a>
 				</div>";
 								}
 							}
@@ -329,24 +332,14 @@ if ($right == 0) {
 
 							?>
 						</div>
+
 						<?php
-							if (isset($_POST['life1'])) {
-								$sql4 = "UPDATE users SET button1=1 WHERE pid='$sid'";
-								$result4 = mysqli_query($conn, $sql4);
-							}
-							?> 
-						<?php
-							if (isset($_POST['life2'])) {
-								$sql5 = "UPDATE users SET button2=1 WHERE pid='$sid'";
-								$result5 = mysqli_query($conn, $sql5);
-							}
-							?>
-							<?php
-							if (isset($_POST['life3'])) {
-								$sql6 = "UPDATE users SET button3=1 WHERE pid='$sid'";
-								$result6 = mysqli_query($conn, $sql6);
-							}
-							?>
+						if(isset($_GET['life2'])){
+
+							$sq = "UPDATE users SET button2=1 WHERE pid='$sid'";
+							$re = mysqli_query($conn, $sq);
+						}
+						?>
 
 
 						<div align='center' class='box'>
@@ -355,14 +348,16 @@ if ($right == 0) {
 							$result3 = mysqli_query($conn, $sql3);
 							while ($row3 = mysqli_fetch_assoc($result3)) {
 								if ($row3['button1'] == 0) {
-									echo "<button type='button' class='button1 mb-1 mt-1 mr-1 btn btn-primary' name='life1'>Call</button>";
+									echo "<button type='button' class='button1 mb-1 mt-1 mr-1 btn' name='life1'>Call</button>";
 								}
 								if ($row3['button2'] == 0) {
-									echo "<button type='button' class='button2 mb-1 mt-1 mr-1 btn btn-primary' name='life2'>Swap</button>";
+									echo "<form method='GET' action=''>";
+									echo "<button type='submit' class='mb-1 mt-1 mr-1 btn' name='life2'>Swap</button>";
+									echo "</form>";
 
 								}
 								if ($row3['button3'] == 0) {
-									echo "<button type='button' class='button3 mb-1 mt-1 mr-1 btn btn-primary' name='life3'>50-50</button>";
+									echo "<button type='button' class='button3 mb-1 mt-1 mr-1 btn' name='life3'>50-50</button>";
 
 								}
 							}
@@ -464,39 +459,41 @@ if ($right == 0) {
 			});
 		});
 		$(document).ready(function () {
-			$(".button2").click(function () {
-				$(this).prop("disabled", true);
+		$(".button3").click(function () {
+        var sid = <?php echo "$sid" ?>;
 
-				var sid = <?php echo "$sid" ?>;
+        $.ajax({
+            type: "GET",
+            url: "lifeline3.php",  // Replace with your PHP script URL
+            data: { id: sid },
+            success: function (response) {
+                // Handle the AJAX response
+                $("#statusContainer").html(response);
 
+                // Disable the button to prevent multiple clicks
+                $(".button3").prop("disabled", true);
 
-				$.ajax({
-					type: "GET",
-					url: "lifeline2.php",  // Replace with your PHP script URL
-					data: { id: sid },
-					success: function (response) {
-						$("#statusContainer").html(response);
-					}
-				});
-			});
-		});
-		$(document).ready(function () {
-			$(".button3").click(function () {
-				$(this).prop("disabled", true);
+                // Call the function to remove two random wrong options
+                removeWrongOptions();
+            }
+        });
+    });
+});
 
-				var sid = <?php echo "$sid" ?>;
-
-
-				$.ajax({
-					type: "GET",
-					url: "lifeline3.php",  // Replace with your PHP script URL
-					data: { id: sid },
-					success: function (response) {
-						$("#statusContainer").html(response);
-					}
-				});
-			});
-		});
+    // Function to remove two random wrong options
+    function removeWrongOptions() {
+        var options = document.querySelectorAll('.box .btn-primary');
+        var removedIndices = [];
+        while (removedIndices.length < 2) {
+            var randIndex = Math.floor(Math.random() * options.length);
+            if (!removedIndices.includes(randIndex) && options[randIndex].textContent.toUpperCase() !== '<?php echo strtoupper($ranswer); ?>') {
+                removedIndices.push(randIndex);
+            }
+        }
+        removedIndices.forEach(function(index) {
+            options[index].style.display = 'none';
+        });
+    }
 		document.getElementById('quit').addEventListener('click', function() {
 			window.location.href = 'index.php';
 		});
@@ -505,7 +502,146 @@ if ($right == 0) {
 			window.location.href = 'scoreboard.php';
 		});
 		
-	</script>
+		</script>
+
+
+<script>
+    let startTime;
+    let pauseStartTime;
+    let pauseEndTime;
+    let pauseTime = 0;
+    let timerInterval;
+
+    // Check if there is a saved state in local storage
+    const savedState = JSON.parse(localStorage.getItem('timerState'));
+
+    if (savedState) {
+        startTime = savedState.startTime;
+        pauseStartTime = savedState.pauseStartTime;
+        pauseEndTime = savedState.pauseEndTime;
+        pauseTime = savedState.pauseTime;
+
+        if (startTime && !pauseStartTime) {
+            // Timer was running, resume it
+            document.getElementById('toggleTimer').innerText = 'Stop Timer';
+            document.getElementById('pauseResume').innerText = 'Pause';
+            document.getElementById('pauseResume').disabled = false;
+            timerInterval = setInterval(updateTimer, 1);
+        } else if (startTime && pauseStartTime) {
+            // Timer was paused, show resume button
+            document.getElementById('toggleTimer').innerText = 'Stop Timer';
+            document.getElementById('pauseResume').innerText = 'Resume';
+            document.getElementById('pauseResume').disabled = false;
+        }
+    }
+
+    function toggleTimer() {
+        if (!startTime) {
+            // Start or resume the timer
+            if (pauseStartTime && pauseEndTime) {
+                const pausedDuration = pauseEndTime - pauseStartTime;
+                pauseTime += pausedDuration;
+                startTime = new Date().getTime() - pauseTime;
+                pauseStartTime = null;
+                pauseEndTime = null;
+            } else {
+                startTime = new Date().getTime() - pauseTime;
+            }
+
+            document.getElementById('toggleTimer').innerText = 'Stop Timer';
+            document.getElementById('pauseResume').disabled = false;
+
+            if (!pauseStartTime) {
+                document.getElementById('pauseResume').innerText = 'Pause';
+                timerInterval = setInterval(updateTimer, 1);
+            } else {
+                document.getElementById('pauseResume').innerText = 'Resume';
+            }
+
+            // Save the current state in local storage
+            saveTimerState();
+        } else {
+            // Stop the timer
+            clearInterval(timerInterval);
+            pauseStartTime = null;
+            pauseEndTime = null;
+
+            const elapsedTime = new Date().getTime() - startTime;
+            const id = <?php echo json_encode($sid); ?>;
+
+            document.getElementById('toggleTimer').innerText = 'Start Timer';
+            document.getElementById('pauseResume').innerText = 'Pause';
+            document.getElementById('pauseResume').disabled = true;
+
+            // Send the elapsed time and timestamps to the server to store in the database
+            sendElapsedTime(elapsedTime, id);
+            startTime = null;
+            pauseTime = 0;
+
+            // Clear the saved state in local storage
+            localStorage.removeItem('timerState');
+        }
+    }
+
+    function pauseResumeTimer() {
+        if (!pauseStartTime) {
+            // Pause the timer
+            clearInterval(timerInterval);
+            pauseStartTime = new Date().getTime();
+            document.getElementById('pauseResume').innerText = 'Resume';
+
+            // Save the current state in local storage
+            saveTimerState();
+        } else {
+            // Resume the timer
+            pauseEndTime = new Date().getTime();
+            document.getElementById('pauseResume').innerText = 'Pause';
+            timerInterval = setInterval(updateTimer, 1);
+
+            // Save the current state in local storage
+            saveTimerState();
+        }
+    }
+
+    function updateTimer() {
+        const currentTime = new Date().getTime();
+        const elapsedTime = currentTime - startTime;
+        const seconds = Math.floor(elapsedTime / 1000);
+        const milliseconds = elapsedTime % 1000;
+        document.getElementById('timeCounter').innerText = `Time Elapsed: ${seconds} seconds ${milliseconds} milliseconds`;
+
+        // Save the current state in local storage
+        saveTimerState();
+    }
+
+    function saveTimerState() {
+        const timerState = {
+            startTime,
+            pauseStartTime,
+            pauseEndTime,
+            pauseTime
+        };
+
+        localStorage.setItem('timerState', JSON.stringify(timerState));
+    }
+
+    function sendElapsedTime(elapsedTime, id) {
+        // Using Fetch API to send data to the server
+        const url = `timestamp.php?elapsedTime=${elapsedTime}&id=${id}`;
+
+        fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json', // You can change this header if needed
+                },
+            })
+            .then(response => response.text())
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+
 
 
 	<!-- Vendor -->

@@ -49,6 +49,7 @@
 												<th>PIN</th>
 												<th>Status</th>
 												<th>WhatsApp Link</th>
+												<th>Replay</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -56,35 +57,30 @@
  										  
         								  $player_res=mysqli_query($conn, "SELECT player_name, place, pid, pin, status, points,  DATE_FORMAT(lastseen, '%W %e %M %h:%i %p') as dt FROM users order by lastseen desc;"); 		
         
-while($row=mysqli_fetch_array($player_res))
-   {
-      $pid=$row['pid'];
-	  echo "<tr>";
-	  echo "<td><b>".$row['player_name']."</b></td>";
-      echo "<td>".$row['place']."</td>";
-      echo "<td>".$row['pid']."</td>";
-      echo "<td>".$row['pin']."</td>";
-
-  	  //$msg1=urlencode("Dear *".$row['player_name']." of ".$row['place']."*,\n\nThank you for registering to Test Game of Bhimavaram Online Housie to be played on *8th June 2021 (Today) at 7 PM*.\n\nGAME LOGIN DETAILS:\n*Game Link:* http://www.srkrec.edu.in/srkrhousie\n*Login ID:* $pid\n*Pin:* ".$row['pin']."\n\nPlease feel free to reply back / call @ *9293940004* for any help.");
-	  
-	  //$msg1=urlencode("*Dear ".$row['player_name']." garu of ".$row['place']."*,\n\nThank you for registering to the *Bhimavaram Online Mega Housie 6* to be played on *24th OCTOBER 2021 (SUNDAY) at 3 PM (Game 1) & 3:30 PM Sharp (Game 2)*.\n\nGAME LOGIN DETAILS:\n*Game Link:* http://www.mcr.org.in/srkrhousie\n*Login ID:* $pid\n*Pin:* ".$row['pin']."\n\nSPONSOR: Bhimavaram Online\n\nPlease feel free to reply back to this message for any help (Or) Call Helpline - 9505356717,9293940004,9392449346,7989371134");
-	  
-	  $msg1=urlencode("Dear *".$row['player_name']."* garu (".$row['place']."),\n\nThank you for registering to the *Kaun Banega CodePathy* .\n\nGAME LOGIN DETAILS:\n*Game Link:* http://www.mcr.org.in/srkrhousie\n*Login ID:* $pid\n*Pin:* ".$row['pin']."\n\nPlease feel free to reply back to this message for any help (Or) Call Helpline - *9182052673*,9010872333");
-	  
-	  if($row['status'] == 1)
-	  {
-        echo "<td><b style='color:green;'>Active</b></td>";
-	  }
-	  else
-	  {
-        echo "<td id='s$pid'><a href='' onclick='change_status($pid);'><b style='color:blue;'>Activate</b></a></td>";  
-	  }
-
-	  echo "<td><a href='https://wa.me/+91".$pid."?text=$msg1'><button type='button' class='mb-1 mt-1 mr-1 btn btn-xs btn-primary'>SEND PIN</button></a></td>";
-	  
-      echo "</tr>";
-	
-	}											
+										  while ($row = mysqli_fetch_array($player_res)) {
+											$pid = $row['pid'];
+											echo "<tr>";
+											echo "<td><b>".$row['player_name']."</b></td>";
+											echo "<td>".$row['place']."</td>";
+											echo "<td>".$row['pid']."</td>";
+											echo "<td>".$row['pin']."</td>";
+										
+											$msg1 = urlencode("Dear ".$row['player_name']." garu (".$row['place']."),\n\nThank you for registering to the Kaun Banega CodePathy .\n\nGAME LOGIN DETAILS:\n*Game Link:* http://www.mcr.org.in/srkrhousie\n*Login ID:* $pid\n*Pin:* ".$row['pin']."\n\nPlease feel free to reply back to this message for any help (Or) Call Helpline - 9182052673,9010872333");
+										
+											if ($row['status'] == 1) {
+												echo "<td><b style='color:green;'>Active</b></td>";
+											} else {
+												echo "<td id='s$pid'><a href='' onclick='change_status($pid);'><b style='color:blue;'>Activate</b></a></td>";
+											}
+										
+											echo "<td><a href='https://wa.me/+91".$pid."?text=$msg1'><button type='button' class='mb-1 mt-1 mr-1 btn btn-xs btn-primary'>SEND PIN</button></a></td>";
+										
+											// New button to update details
+											echo "<td><a href='update_details.php?pid=$pid'><button type='button' class='mb-1 mt-1 mr-1 btn btn-xs btn-primary'>Replay</button></a></td>";
+										
+											echo "</tr>";
+										}
+																					
                                         ?>  
 										</tbody>
 									</table>
@@ -92,7 +88,8 @@ while($row=mysqli_fetch_array($player_res))
 								</div>
 <!--							<button id="sticky-error" class="mt-3 mb-3 btn btn-danger">Error</button> -->
 							</section>
-								
+						
+
 
 					</div>
                     </div>

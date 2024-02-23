@@ -204,9 +204,7 @@ if ($right == 0) {
 	<section class="body">
 		<?php include "header.php"; ?>
 		<div class="inner-wrapper">
-			<!-- start: sidebar -->
 			<?php include "sidebar.php"; ?>
-			<!-- end: sidebar -->
 			<section role="main" class="content-body">
 				<header class="page-header">
 					<h2 style="margin-left: 37%;">Kaun Banega Codepathi</h2>
@@ -331,6 +329,13 @@ if ($right == 0) {
 
 							?>
 						</div>
+						<?php
+						if (isset($_GET['life2'])) {
+
+							$sq = "UPDATE users SET button2=1 WHERE pid='$sid'";
+							$re = mysqli_query($conn, $sq);
+						}
+						?>
 
 						<div align='center' class='box'>
 							<?php
@@ -338,14 +343,16 @@ if ($right == 0) {
 							$result3 = mysqli_query($conn, $sql3);
 							while ($row3 = mysqli_fetch_assoc($result3)) {
 								if ($row3['button1'] == 0) {
-									echo "<button type='button' class='button1 mb-1 mt-1 mr-1 btn btn-primary' name='life1'>Call</button>";
+									echo "<button type='button' class='button1 mb-1 mt-1 mr-1 btn' name='life1'>Call</button>";
 								}
 								if ($row3['button2'] == 0) {
-									echo "<button type='button' class='button2 mb-1 mt-1 mr-1 btn btn-primary' name='life2'>Swap</button>";
+									echo "<form action='' method='get'>";
+									echo "<button type='submit' class='button2 mb-1 mt-1 mr-1 btn' name='life2'>Swap</button>";
+									echo "</form>";
 
 								}
 								if ($row3['button3'] == 0) {
-									echo "<button type='button' class='button3 mb-1 mt-1 mr-1 btn btn-primary' name='life3'>50-50</button>";
+									echo "<button type='button' class='button3 mb-1 mt-1 mr-1 btn' name='life3'>50-50</button>";
 
 								}
 							}
@@ -449,41 +456,45 @@ if ($right == 0) {
 			});
 		});
 		$(document).ready(function () {
-			$(".button2").click(function () {
-				$(this).prop("disabled", true);
-
-				var sid = <?php echo "$sid" ?>;
-
-
-				$.ajax({
-					type: "GET",
-					url: "lifeline2.php",  // Replace with your PHP script URL
-					data: { id: sid },
-					success: function (response) {
-						$("#statusContainer").html(response);
-					}
-				});
-			});
-		});
-		$(document).ready(function () {
 			$(".button3").click(function () {
-				$(this).prop("disabled", true);
-
 				var sid = <?php echo "$sid" ?>;
-
 
 				$.ajax({
 					type: "GET",
 					url: "lifeline3.php",  // Replace with your PHP script URL
 					data: { id: sid },
 					success: function (response) {
+						// Handle the AJAX response
 						$("#statusContainer").html(response);
+
+						// Disable the button to prevent multiple clicks
+						$(".button3").prop("disabled", true);
+
+						// Call the function to remove two random wrong options
+						removeWrongOptions();
 					}
 				});
 			});
+
+			// Function to remove two random wrong options
+			function removeWrongOptions() {
+				var options = document.querySelectorAll('.box .btn-primary');
+				var removedIndices = [];
+				while (removedIndices.length < 2) {
+					var randIndex = Math.floor(Math.random() * options.length);
+					if (!removedIndices.includes(randIndex) && options[randIndex].textContent.toUpperCase() !== '<?php echo strtoupper($ranswer); ?>') {
+						removedIndices.push(randIndex);
+					}
+				}
+				removedIndices.forEach(function (index) {
+					options[index].style.display = 'none';
+				});
+			}
 		});
+
+
 		document.getElementById('quit').addEventListener('click', function () {
-			window.location.href = 'index.php';
+			window.location.href = 'index.php?logout';
 		});
 
 		document.getElementById('continue').addEventListener('click', function () {
